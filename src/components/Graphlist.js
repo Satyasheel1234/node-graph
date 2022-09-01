@@ -1,18 +1,17 @@
-import React  from "react";
+import React from "react";
 import Record from "../db.json";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, generatePath } from "react-router-dom";
 import { useState } from "react";
 import Graphdetails from "./Graphdetails";
 
 function GraphList() {
   const [query, setQuery] = useState("");
-  // const data = "this is data";
-
+  const [id, setId] = useState();
   let navigate = useNavigate();
-  const routeChange = () => {
-    let path = `/graphdetails`;
-    navigate(path);
+  const routeChange = e => {
+    id && navigate(generatePath("/graphdetails/:id", { id }));
   };
+
   return (
     <>
       Search Graph List: <input placeholder="Enter Post Title" onChange={event => setQuery(event.target.value)} />
@@ -31,11 +30,14 @@ function GraphList() {
                 return item;
               }
             }).map((item, i) => (
-              
-              <tr key={i}>
+              <tr
+                key={i}
+                onClick={e => {
+                  setId(item.id);
+                }}
+              >
                 <td onClick={routeChange}>{item.name}</td>
                 <td onClick={routeChange}>{item.id} </td>
-                {/* <Graphdetails data={item}/> */}
               </tr>
             ))}
           </tbody>
@@ -46,5 +48,3 @@ function GraphList() {
 }
 
 export default GraphList;
-
-

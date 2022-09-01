@@ -2,61 +2,54 @@ import React from "react";
 import Graph from "react-graph-vis";
 import ReactDOM from "react-dom/client";
 import "../../src/styles.css";
-// need to import the vis network css in order to show tooltip
+import { useParams } from "react-router-dom";
+import Record from "../db.json";
 import "../../src/network.css";
 
-export default function Graphdetails(props) {
-//console.log(props.data)
-// const graph = props.data;
+export default function Graphdetails() {
+  const { id } = useParams();
+  const GraphDetailsById = Record.filter(x => x.id == id);
+  //  if(GraphDetailsById!= null)
+  //   {
+  const formattedEdges = [];
+  GraphDetailsById[0].data.edges.forEach(x => {
+    const obj = { from: x.source, to: x.target };
+    formattedEdges.push(obj);
+  });
 
+  const formattedGraph = { nodes: GraphDetailsById[0].data.nodes, edges: formattedEdges };
+  //}
 
-    const graph = {
-        nodes: [
-          { id: 1, label: "Node 1", title: "node 1 tootip text" },
-          { id: 2, label: "Node 2", title: "node 2 tootip text" },
-          { id: 3, label: "Node 3", title: "node 3 tootip text" },
-          { id: 4, label: "Node 4", title: "node 4 tootip text" },
-          { id: 5, label: "Node 5", title: "node 5 tootip text" }
-        ],
-        edges: [
-          { from: 1, to: 2 },
-          { from: 1, to: 3 },
-          { from: 2, to: 4 },
-          { from: 2, to: 5 }
-        ]
-      };
-    
-      const options = {
-        layout: {
-          hierarchical: false
-        },
-        edges: {
-          color: "#000000"
-        },
-        height: "500px"
-      };
-    
-      const events = {
-        select: function(event) {
-          console.log("events",event)
-          var { nodes, edges } = event;
-        }
-      };
-      
-      return (
-          <div>
-        <Graph
-          graph={graph}
-          options={options}
-          events={events}
-          getNetwork={network => {
-            //  if you want access to vis.js network api you can set the state in a parent component using this property
-          }}
-        />
-        </div>
-      );
+  const options = {
+    layout: {
+      hierarchical: false
+    },
+    edges: {
+      color: "#000000"
+    },
+    height: "500px"
+  };
+
+  const events = {
+    select: function(event) {
+      console.log("events", event);
+      var { nodes, edges } = event;
+    }
+  };
+
+  return (
+    <div>
+      <Graph
+        graph={formattedGraph}
+        options={options}
+        events={events}
+        getNetwork={network => {
+          //  if you want access to vis.js network api you can set the state in a parent component using this property
+        }}
+      />
+    </div>
+  );
 }
 
-
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<Graphdetails />)
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<Graphdetails />);

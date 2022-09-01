@@ -13,7 +13,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Graphlist />} />
-          <Route exact path="/graphdetails" element={<Graphdetails />} />
+          <Route exact path="/graphdetails/:id" element={<Graphdetails />} />
         </Route>
       </Routes>
       <Footer />
