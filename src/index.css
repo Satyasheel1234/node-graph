@@ -11,3 +11,19 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.header{
+  background-color: aliceblue;
+  padding: 20px;
+}
+.footer{
+  background-color: aliceblue;
+  padding: 20px;
+}
+
+.graphlist{
+  background-color: darkgray;
+  padding: 20px;
+}
+.createPage{
+  float: right;
+}

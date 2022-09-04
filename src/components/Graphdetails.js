@@ -3,22 +3,47 @@ import Graph from "react-graph-vis";
 import ReactDOM from "react-dom/client";
 import "../../src/styles.css";
 import { useParams } from "react-router-dom";
-import Record from "../db.json";
+import axios from "axios";
+import { useEffect, useRef } from "react";
 import "../../src/network.css";
+
+const baseURL = "http://127.0.0.1:8081/graphlist";
 
 export default function Graphdetails() {
   const { id } = useParams();
-  const GraphDetailsById = Record.filter(x => x.id == id);
-  //  if(GraphDetailsById!= null)
-  //   {
+
+  const [graph, setGraph] = React.useState(null);
+  const renderAfterCalled = useRef(false);
+
+  useEffect(
+    () => {
+      if (!renderAfterCalled.current) {
+        if (id) {
+          axios
+            .get(`${baseURL}/${id}`)
+            .then(res => {
+              console.log(res.data);
+              setGraph(res.data);
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        }
+      }
+      renderAfterCalled.current = true;
+    },
+    [id]
+  );
+
+  if (!graph) return null;
+
   const formattedEdges = [];
-  GraphDetailsById[0].data.edges.forEach(x => {
+  graph.data.edges.forEach(x => {
     const obj = { from: x.source, to: x.target };
     formattedEdges.push(obj);
   });
 
-  const formattedGraph = { nodes: GraphDetailsById[0].data.nodes, edges: formattedEdges };
-  //}
+  const formattedGraph = { nodes: graph.data.nodes, edges: formattedEdges };
 
   const options = {
     layout: {
